@@ -46,11 +46,6 @@ fs.createReadStream("./data.csv")
   for await (const e of placas) {
     await page.keyboard.insertText(e.placa);
     console.log("%cindex.ts:47 e.placa", "color: #007acc;", e.placa);
-    const requestPromise = page.waitForRequest(
-      "https://pasarela.atu.gob.pe/api/SISPAGO/Deuda/consultaExterna"
-    );
-    await page.keyboard.press("Enter");
-    await requestPromise;
     await page.keyboard.press("Enter");
     await page.keyboard.press("Escape");
     await page.keyboard.press("Shift+Tab");
@@ -61,6 +56,7 @@ fs.createReadStream("./data.csv")
     await page.keyboard.press("Tab");
     await page.keyboard.press("Tab");
     await page.keyboard.press("Tab");
+    await page.waitForTimeout(5000);
   }
   await browser.close();
 })();
