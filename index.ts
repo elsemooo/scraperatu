@@ -1,8 +1,6 @@
 import { chromium } from "playwright";
 import csvParser from "csv-parser";
 import fs from "fs";
-import { removeAllListeners } from "process";
-
 let placas: any = [];
 fs.createReadStream("./data.csv")
   .pipe(csvParser())
