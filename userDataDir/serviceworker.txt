@@ -1,0 +1,13 @@
+9
+
+https://pasarela.atu.gob.pe/
+https://pasarela.atu.gob.pe/service-worker.js
+true
+{36cc7510-f9ca-4615-a46e-c8beb306aad1}
+0
+1742594227774823
+1742594227779866
+1742594225404362
+0
+true
+#

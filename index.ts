@@ -1,4 +1,4 @@
-import { chromium } from "playwright";
+import { chromium, firefox } from "playwright";
 import csvParser from "csv-parser";
 import fs from "fs";
 let placas: any = [];
@@ -13,13 +13,8 @@ fs.createReadStream("./data.csv")
 (async () => {
   const pathToExtension =
     "./extensions/pgojnojmmhpofjgdmaebadhbocahppod/1.15.5_0/";
-  const browser = await chromium.launchPersistentContext("userDataDir", {
+  const browser = await firefox.launch({
     headless: false,
-    acceptDownloads: true,
-    args: [
-      `--disable-extensions-except=${pathToExtension}`,
-      `--load-extension=${pathToExtension}`,
-    ],
   });
   const page = await browser.newPage();
   const tabs = async (n: number) => {
@@ -38,11 +33,16 @@ fs.createReadStream("./data.csv")
   console.log("cargo");
   await tabs(6);
   await page.keyboard.press("Enter");
-  await page.locator("span").getByText("Por Placa").click();
-  await page.keyboard.press("Escape");
-  await tabs(5);
+  await page.waitForSelector(
+    `//html/body/app-component/main/main-component/div[2]/page-buscar-deuda-component/div[1]/div/div/div[2]/div[1]/div/div[2]/form/div/obj-select-component/div/ul`
+  );
+  await page.waitForTimeout(500);
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Tab");
+  console.log("inicio");
   for await (const e of placas) {
-    await page.keyboard.insertText(e.placa);
+    await page.fill(`//*[@id="PlacaBusquedainputElemento"]`, e.placa);
     console.log("%cindex.ts:47 e.placa", "color: #007acc;", e.placa);
     await page.keyboard.press("Enter");
     await page.keyboard.press("Escape");
@@ -56,5 +56,6 @@ fs.createReadStream("./data.csv")
     await page.keyboard.press("Tab");
     await page.waitForTimeout(5000);
   }
+  await page.waitForTimeout(6000);
   await browser.close();
 })();
